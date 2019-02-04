@@ -16,7 +16,6 @@ def create_app(test_config=None):
 
     app.config.from_mapping(
         SECRET_KEY = 'secret',
-        ADDRESS_FILES = '',
         RABBIT_URL = 'localhost',
         RABBIT_USERNAME = 'guest',
         RABBIT_PASSWORD = 'guest',
