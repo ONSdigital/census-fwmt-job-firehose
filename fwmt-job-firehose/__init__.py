@@ -59,7 +59,6 @@ def create_app(test_config=None):
 
     return app
 
-# # # CONTACTS
 def pick_contact():
     return {
         'title':         'Mr',
