@@ -36,7 +36,8 @@ def close_db(e = None):
 @with_appcontext
 def init_db():
     """Set up the initial database tables"""
-    get_db().cursor().execute('''CREATE TABLE IF NOT EXISTS ids (id TEXT PRIMARY KEY, time TEXT DEFAULT CURRENT_TIMESTAMP)''')
+    # Currently, IDs are not stored
+    # get_db().cursor().execute('''CREATE TABLE IF NOT EXISTS ids (id TEXT PRIMARY KEY, time TEXT DEFAULT CURRENT_TIMESTAMP)''')
     get_db().cursor().execute(
         '''CREATE TABLE IF NOT EXISTS addresses (
           sampleUnitRef TEXT, type TEXT, estabType TEXT, locality TEXT, organisationName TEXT, category TEXT,
@@ -89,7 +90,8 @@ def load_address_json(filename):
 
 def generate_id():
     id = str(uuid.uuid4())
-    get_db().cursor().execute('''INSERT INTO ids (id) VALUES (?)''', (id,))
+    # Currently, IDs are not stored
+    # get_db().cursor().execute('''INSERT INTO ids (id) VALUES (?)''', (id,))
     return id
 
 # def load_addresses():
