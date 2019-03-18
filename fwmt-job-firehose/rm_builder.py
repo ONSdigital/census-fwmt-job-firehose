@@ -3,11 +3,12 @@ import xml.etree.ElementTree as ET
 def init_app(app):
     pass
 
-def construct_RM_action_request(id, address_data, contact_data):
+def construct_RM_action_request(id, address_data, contact_data, pause_data):
     ins         = ET.Element('actionInstruction')
     req         = ET.SubElement(ins, 'actionRequest')
     actionPlan  = ET.SubElement(req, 'actionPlan')
     actionType  = ET.SubElement(req, 'actionType') # mandatory
+    actionType.text = 'Create'
     questionSet = ET.SubElement(req, 'questionSet')
 
     contact                   = ET.SubElement(req, 'contact')
@@ -29,6 +30,10 @@ def construct_RM_action_request(id, address_data, contact_data):
     address                       = ET.SubElement(req, 'address') # mandatory
     address_sampleUnitRef         = ET.SubElement(address, 'sampleUnitRef') # mandatory
     address_sampleUnitRef.text    = address_data.get('sampleUnitRef', None)
+    address_arid                  = ET.SubElement(address, 'arid')
+    address_arid.text             = address_data.get('arid', None)
+    address_uprn                  = ET.SubElement(address, 'uprn')
+    address_uprn.text             = address_data.get('uprn', None)
     address_type                  = ET.SubElement(address, 'type')
     address_type.text             = address_data.get('type', None)
     address_estabType             = ET.SubElement(address, 'estabType')
@@ -59,6 +64,18 @@ def construct_RM_action_request(id, address_data, contact_data):
     address_latitude.text         = address_data.get('latitude', '0')
     address_longitude             = ET.SubElement(address, 'longitude')
     address_longitude.text        = address_data.get('longitude', '0')
+    address_oa                    = ET.SubElement(address, 'oa')
+    address_oa.text               = address_data.get('oa', None)
+
+    pause                         = ET.SubElement(req, 'pause')
+    pause_effectiveDate           = ET.SubElement(pause, 'effectiveDate')
+    pause_effectiveDate.text      = pause_data.effective_date
+    pause_code                    = ET.SubElement(pause, 'code')
+    pause_code.text               = pause_data.code
+    pause_reason                  = ET.SubElement(pause, 'reason')
+    pause_reason.text             = pause_data.reason
+    pause_holdUntil               = ET.SubElement(pause, 'holdUntil')
+    pause_holdUntil.text          = pause_data.hold_until
 
     legalBasis       = ET.SubElement(req, 'legalBasis')
     region           = ET.SubElement(req, 'region')
@@ -76,13 +93,26 @@ def construct_RM_action_request(id, address_data, contact_data):
     events  = ET.SubElement(req, 'events') # mandatory
     # event_1 = ET.SubElement(events, 'event', text = 'foo')
 
-    exerciseRef       = ET.SubElement(req, 'exerciseRef')
-    userDescription   = ET.SubElement(req, 'userDescription')
-    surveyName        = ET.SubElement(req, 'surveyName')
-    surveyRef         = ET.SubElement(req, 'surveyRef') # 'HH', 'CCS' or 'CE' to match a job service component
-    surveyRef.text    = 'HH'
-    returnByDate      = ET.SubElement(req, 'returnByDate')
-    returnByDate.text = '01/01/1999'
+    exerciseRef             = ET.SubElement(req, 'exerciseRef')
+    userDescription         = ET.SubElement(req, 'userDescription')
+    surveyName              = ET.SubElement(req, 'surveyName')
+    surveyRef               = ET.SubElement(req, 'surveyRef') # 'HH', 'CCS' or 'CE' to match a job service component
+    surveyRef.text          = 'HH'
+    returnByDate            = ET.SubElement(req, 'returnByDate')
+    returnByDate.text       = '01/01/1999'
+    addressType             = ET.SubElement(req, 'addressType')
+    addressType.text       = 'HH'
+    addressLevel            = ET.SubElement(req, 'addressLevel')
+    treatmentID             = ET.SubElement(req, 'treatmentID')
+    fieldOfficerID            = ET.SubElement(req, 'fieldOfficerID')
+    coordinatorId           = ET.SubElement(req, 'coordinatorId')
+    undeliveredAsAddress    = ET.SubElement(req, 'undeliveredAsAddress')
+    undeliveredAsAddress.text = 'false'
+    cssQuestionaireUrl      = ET.SubElement(req, 'cssQuestionaireUrl')
+    ceDeliveryReqd          = ET.SubElement(req, 'ceDeliveryReqd')
+    ceCE1Complete           = ET.SubElement(req, 'ceCE1Complete')
+    ceExpectedResponses     = ET.SubElement(req, 'ceExpectedResponses')
+    ceActualResponses       = ET.SubElement(req, 'ceActualResponses')
 
     return ins
 

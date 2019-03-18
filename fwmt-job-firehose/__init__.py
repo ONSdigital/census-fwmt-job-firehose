@@ -13,6 +13,8 @@ def create_app(test_config=None):
     rabbit.init_app(app)
     from . import rm_builder
     rm_builder.init_app(app)
+    from . import pause_builder
+    pause_builder.init_app(app)
 
     app.config.from_mapping(
         SECRET_KEY = 'secret',
@@ -37,7 +39,8 @@ def create_app(test_config=None):
             id = db.generate_id()
             address = db.pick_address()
             contact = pick_contact()
-            tree = rm_builder.construct_RM_action_request(id, address, contact)
+            pause = pause_builder.construct_pause()
+            tree = rm_builder.construct_RM_action_request(id, address, contact, pause)
             xml = ET.tostring(tree, encoding='unicode')
             return xml
 
@@ -47,13 +50,13 @@ def create_app(test_config=None):
                 messages.append(make_message())
             return Response(json.dumps(messages), mimetype='application/json')
         elif request.method == 'POST':
-            rabbit = RabbitProxy()
+            proxy = rabbit.RabbitProxy()
             for _ in range(count):
-                success = rabbit.send(make_message())
+                success = proxy.send(make_message())
                 if not success:
                     print('Message could not be confirmed')
                     raise Exception()
-            rabbit.close()
+            proxy.close()
             return Response()
 
     return app
