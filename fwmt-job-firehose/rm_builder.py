@@ -113,6 +113,8 @@ def construct_RM_action_request(id, address_data, contact_data, pause_data):
     ceCE1Complete           = ET.SubElement(req, 'ceCE1Complete')
     ceExpectedResponses     = ET.SubElement(req, 'ceExpectedResponses')
     ceActualResponses       = ET.SubElement(req, 'ceActualResponses')
+    blankQreReturned        = ET.SubElement(req, 'blankQreReturned')
+    blankQreReturned.text   = 'false'
 
     return ins
 
