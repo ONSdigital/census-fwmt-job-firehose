@@ -101,7 +101,7 @@ def construct_RM_action_request(id, address_data, contact_data, pause_data):
     returnByDate            = ET.SubElement(req, 'returnByDate')
     returnByDate.text       = '01/01/1999'
     addressType             = ET.SubElement(req, 'addressType')
-    addressType.text       = 'HH'
+    addressType.text        = 'HH'
     addressLevel            = ET.SubElement(req, 'addressLevel')
     treatmentID             = ET.SubElement(req, 'treatmentID')
     fieldOfficerID            = ET.SubElement(req, 'fieldOfficerID')
