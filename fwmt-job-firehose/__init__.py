@@ -31,6 +31,10 @@ def create_app(test_config=None):
 
     app.config.from_pyfile('config.py', silent=False)
 
+    @app.route("/info", methods=['GET'])
+    def handle_info():
+        return "Ready!"
+
     @app.route("/rm/actionRequest", methods=['GET', 'POST'])
     def handle_rm_action_request():
         count = int(request.args.get('count'))
