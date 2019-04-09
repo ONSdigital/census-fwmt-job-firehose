@@ -103,12 +103,12 @@ def construct_RM_action_request(id, address_data, contact_data, pause_data):
     addressType             = ET.SubElement(req, 'addressType')
     addressType.text        = 'HH'
     addressLevel            = ET.SubElement(req, 'addressLevel')
-    treatmentID             = ET.SubElement(req, 'treatmentID')
-    fieldOfficerID            = ET.SubElement(req, 'fieldOfficerID')
+    treatmentID             = ET.SubElement(req, 'treatmentId')
+    fieldOfficerID            = ET.SubElement(req, 'fieldOfficerId')
     coordinatorId           = ET.SubElement(req, 'coordinatorId')
     undeliveredAsAddress    = ET.SubElement(req, 'undeliveredAsAddress')
     undeliveredAsAddress.text = 'false'
-    cssQuestionaireUrl      = ET.SubElement(req, 'cssQuestionaireUrl')
+    cssQuestionaireUrl      = ET.SubElement(req, 'cssQuestionnaireUrl')
     ceDeliveryReqd          = ET.SubElement(req, 'ceDeliveryReqd')
     ceCE1Complete           = ET.SubElement(req, 'ceCE1Complete')
     ceExpectedResponses     = ET.SubElement(req, 'ceExpectedResponses')
