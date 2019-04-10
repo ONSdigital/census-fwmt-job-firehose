@@ -4,8 +4,8 @@ def init_app(app):
     pass
 
 class RabbitProxy:
-    def __init__(self):
-        self.connection = pika.BlockingConnection()
+    def __init__(self, url):
+        self.connection = pika.BlockingConnection(parameters=pika.URLParameters(url))
         self.channel = self.connection.channel()
         self.channel.confirm_delivery()
         self.properties = pika.BasicProperties(content_type = 'text/json', delivery_mode = 1)

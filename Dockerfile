@@ -1,11 +1,8 @@
 FROM python:3-alpine
 
 ARG secret
-ARG rabbit_url="rabbitmq"
-ARG rabbit_user="guest"
-ARG rabbit_pass="guest"
+ARG rabbit_url="amqp://guest:guest@localhost:5672/%2F"
 
-VOLUME ["/firehose-data"]
 COPY ./fwmt-job-firehose /fwmt-job-firehose
 COPY ./data /data
 COPY requirements.txt /
@@ -15,8 +12,6 @@ ENV FLASK_APP=fwmt-job-firehose
 
 RUN echo "SECRET_KEY = '${secret}'" >> /instance/config.py
 RUN echo "RABBIT_URL = '${rabbit_url}'" >> /instance/config.py
-RUN echo "RABBIT_USERNAME = '${rabbit_user}'" >> /instance/config.py
-RUN echo "RABBIT_PASSWORD = '${rabbit_pass}'" >> /instance/config.py
 
 RUN pip install -r requirements.txt
 

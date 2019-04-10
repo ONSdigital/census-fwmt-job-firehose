@@ -4,6 +4,31 @@ import json
 import os
 import random
 
+def config_by_env(app, env):
+    val = os.environ.get(env, default=None)
+    if val:
+        app.config[env] = val
+
+def config_app(app):
+    # default values
+    app.config.from_mapping(
+        SECRET_KEY = 'secret',
+        RABBIT_URL = 'amqp://guest:guest@localhost:5672/%2F',
+    )
+
+    # disk configuration
+    app.config.from_pyfile('config.py', silent=False)
+
+    # environmental overrides
+    config_by_env(app, 'SECRET_KEY')
+    config_by_env(app, 'RABBIT_URL')
+
+def get_arg_or_fail(request, name):
+    arg = request.args.get(name)
+    if not arg:
+        raise ValueError("Invalid argument: " + name)
+    return arg
+
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
@@ -16,20 +41,13 @@ def create_app(test_config=None):
     from . import pause_builder
     pause_builder.init_app(app)
 
-    app.config.from_mapping(
-        SECRET_KEY = 'secret',
-        RABBIT_URL = 'localhost',
-        RABBIT_USERNAME = 'guest',
-        RABBIT_PASSWORD = 'guest',
-    )
-
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
     except OSError:
         pass
 
-    app.config.from_pyfile('config.py', silent=False)
+    config_app(app)
 
     @app.route("/info", methods=['GET'])
     def handle_info():
@@ -37,7 +55,7 @@ def create_app(test_config=None):
 
     @app.route("/rm/actionRequest", methods=['GET', 'POST'])
     def handle_rm_action_request():
-        count = int(request.args.get('count'))
+        count = int(get_arg_or_fail(request, 'count'))
 
         def make_message():
             id = db.generate_id()
@@ -54,7 +72,7 @@ def create_app(test_config=None):
                 messages.append(make_message())
             return Response(json.dumps(messages), mimetype='application/json')
         elif request.method == 'POST':
-            proxy = rabbit.RabbitProxy()
+            proxy = rabbit.RabbitProxy(app.config['RABBIT_URL'])
             for _ in range(count):
                 success = proxy.send(make_message())
                 if not success:
