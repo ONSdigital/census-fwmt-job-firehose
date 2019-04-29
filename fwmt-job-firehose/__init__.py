@@ -76,10 +76,21 @@ def create_app(test_config=None):
             for _ in range(count):
                 success = proxy.send(make_message())
                 if not success:
-                    print('Message could not be confirmed')
-                    raise Exception()
+                    raise Exception('Message could not be confirmed')
             proxy.close()
             return Response()
+
+    @app.route("/rm/customRequest", methods=['POST'])
+    def handle_rm_custom_request():
+        message = request.get_data(as_text=True)
+        proxy = rabbit.RabbitProxy(app.config['RABBIT_URL'])
+        try:
+            success = proxy.send(message)
+            if not success:
+                raise Exception('Message could not be confirmed')
+        finally:
+            proxy.close()
+        return Response()
 
     return app
 
